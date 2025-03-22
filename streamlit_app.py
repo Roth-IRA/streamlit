@@ -47,10 +47,8 @@ st.write('Subcategory selected:', selected_sub_categories)
 st.write("### (3) show a line chart of sales for the selected items in (2)")
 if selected_sub_categories:
     filtered_data = filtered_data[filtered_data['Sub_Category'].isin(selected_sub_categories)]
-    filtered_data['Month'] = filtered_data['Order_Date'].dt.to_period('M').dt.to_timestamp()
-    monthly_sales = filtered_data.groupby(['Month', 'Sub_Category'])['Sales'].sum().reset_index()
-    monthly_sales_pivot = monthly_sales.pivot(index='Month', columns='Sub_Category', values='Sales')
-    st.line_chart(monthly_sales_pivot,y="Sales")
+    monthly_sales_sub = filtered_data.groupby([filtered_data.index, 'Sub_Category'])['Sales'].sum()
+    st.line_chart(monthly_sales_sub,y="Sales")
 else:
     st.write('Please select at least one Sub-Category to view the chart.')
   
