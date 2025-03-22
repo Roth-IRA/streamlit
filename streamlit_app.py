@@ -20,9 +20,9 @@ st.bar_chart(df.groupby("Category", as_index=False).sum(), x="Category", y="Sale
 # Aggregating by time
 # Here we ensure Order_Date is in datetime format, then set is as an index to our dataframe
 df["Order_Date"] = pd.to_datetime(df["Order_Date"])
-df.set_index('Order_Date', inplace=True)
+df_sales = df.set_index('Order_Date', inplace=False)
 # Here the Grouper is using our newly set index to group by Month ('M')
-sales_by_month = df.filter(items=['Sales']).groupby(pd.Grouper(freq='M')).sum()
+sales_by_month = df_sales.filter(items=['Sales']).groupby(pd.Grouper(freq='M')).sum()
 
 st.dataframe(sales_by_month)
 
@@ -47,8 +47,10 @@ st.write('Subcategory selected:', selected_sub_categories)
 st.write("### (3) show a line chart of sales for the selected items in (2)")
 if selected_sub_categories:
     filtered_data = filtered_data[filtered_data['Sub_Category'].isin(selected_sub_categories)]
-    monthly_sales_sub = filtered_data.groupby([filtered_data.index, 'Sub_Category'])['Sales'].sum()
-    st.line_chart(monthly_sales_sub,y="Sales")
+    filtered_data['Month'] = filtered_data['Order_Date'].dt.to_period('M').dt.to_timestamp()
+    monthly_sales = filtered_data.groupby(['Month', 'Sub_Category'])['Sales'].sum().reset_index()
+    monthly_sales_pivot = monthly_sales.pivot(index='Month', columns='Sub_Category', values='Sales')
+    st.line_chart(monthly_sales_pivot)
 else:
     st.write('Please select at least one Sub-Category to view the chart.')
   
