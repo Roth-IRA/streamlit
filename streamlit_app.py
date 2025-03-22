@@ -42,7 +42,7 @@ st.write("### (2) add a multi-select for Sub_Category *in the selected Category 
 filtered_data = df[df['Category'] == category]
 sub_categories = filtered_data['Sub_Category'].unique()
 selected_sub_categories = st.multiselect('Select subcategories:', sub_categories)
-st.write('Subcategory selected:', selected_sub_categories)
+st.write('Subcategories selected:', selected_sub_categories)
 
 st.write("### (3) show a line chart of sales for the selected items in (2)")
 if selected_sub_categories:
@@ -52,7 +52,7 @@ if selected_sub_categories:
     monthly_sales_pivot = monthly_sales_sub.pivot(index='Order_Date', columns='Sub_Category', values='Sales')
     monthly_sales_pivot = monthly_sales_pivot.fillna(0)
     st.dataframe(monthly_sales_pivot)
-    st.line_chart(monthly_sales_pivot)
+    st.line_chart(monthly_sales_pivot, y_label = "Sales")
 else:
     st.write('Please select at least one Sub-Category to view the chart.')
   
