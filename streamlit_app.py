@@ -50,8 +50,8 @@ if selected_sub_categories:
     filtered_data['Order_Date'] = filtered_data['Order_Date'].dt.to_period('M').dt.to_timestamp()
     monthly_sales_sub = filtered_data.groupby(['Order_Date', 'Sub_Category'])['Sales'].sum().reset_index()
     st.dataframe(monthly_sales_sub)
-    monthly_sales_pivot = monthly_sales_sub.pivot(index='Order_Date', columns='Sub_Category', values='Sales')
-    st.line_chart(monthly_sales_pivot, y = 'Sales')
+    # monthly_sales_pivot = monthly_sales_sub.pivot(index='Order_Date', columns='Sub_Category', values='Sales')
+    st.line_chart(monthly_sales_sub, y = 'Sales')
 else:
     st.write('Please select at least one Sub-Category to view the chart.')
   
