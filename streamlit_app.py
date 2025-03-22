@@ -50,6 +50,7 @@ if selected_sub_categories:
     filtered_data['Order_Date'] = filtered_data['Order_Date'].dt.to_period('M').dt.to_timestamp()
     monthly_sales_sub = filtered_data.groupby(['Order_Date', 'Sub_Category'])['Sales'].sum().reset_index()
     monthly_sales_pivot = monthly_sales_sub.pivot(index='Order_Date', columns='Sub_Category', values='Sales')
+    monthly_sales_pivot = monthly_sales_pivot.fillna(0)
     st.dataframe(monthly_sales_pivot)
     st.line_chart(monthly_sales_pivot)
 else:
